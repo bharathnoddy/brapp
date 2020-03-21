@@ -9,7 +9,6 @@ phases:
 
   pre_build: # Add kubeconfig to access to EKS cluster
     commands:
-      - echo $account.dkr.ecr.$region.amazonaws.com/$repo
       - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
       - aws eks update-kubeconfig --name bharath-codetest-cluster --role-arn arn:aws:iam::673377339958:role/terraform
   build: # Build Docker image and tag it with the commit sha
