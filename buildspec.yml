@@ -14,7 +14,7 @@ phases:
       - aws eks update-kubeconfig --name bharath-codetest-cluster --role-arn arn:aws:iam::673377339958:role/terraform
   build: # Build Docker image and tag it with the commit sha
     commands:
-      - sudo docker build -t $repo:$CODEBUILD_RESOLVED_SOURCE_VERSION app/
+      - docker build -t $repo:$CODEBUILD_RESOLVED_SOURCE_VERSION app/
       - docker tag $repo:$CODEBUILD_RESOLVED_SOURCE_VERSION 673377339958.dkr.ecr.eu-west-1.amazonaws.com/$repo:$CODEBUILD_RESOLVED_SOURCE_VERSION
   post_build: # Push the Docker image to the ECR
     commands:
