@@ -1,6 +1,6 @@
 version: 0.2
 phases:
-  install: # Install AWS cli, kubectl (needed for Helm) and Helm
+  install: # Install AWS cli, helm
     commands:
        - apt-get update
        - export DEBIAN_FRONTEND=noninteractive
@@ -14,12 +14,11 @@ phases:
       - aws eks update-kubeconfig --name bharath-codetest-cluster --role-arn arn:aws:iam::673377339958:role/terraform
   build: # Build Docker image and tag it with the commit sha
     commands:
-      - cd app
-      - docker build . -t $repo:$CODEBUILD_RESOLVED_SOURCE_VERSION -f app/Dockerfile
+      - sudo docker build -t $repo:$CODEBUILD_RESOLVED_SOURCE_VERSION app/
       - docker tag $repo:$CODEBUILD_RESOLVED_SOURCE_VERSION 673377339958.dkr.ecr.eu-west-1.amazonaws.com/$repo:$CODEBUILD_RESOLVED_SOURCE_VERSION
   post_build: # Push the Docker image to the ECR
     commands:
       - $(aws ecr get-login --no-include-email --region eu-west-1)
       - docker push 673377339958.dkr.ecr.eu-west-1.amazonaws.com/$repo:$CODEBUILD_RESOLVED_SOURCE_VERSION
       - cd ..
-      - helm upgrade -i brapp  brapp --set image.imageTag = $CODEBUILD_RESOLVED_SOURCE_VERSION
+      - helm upgrade -i brapp  brapp --set image.imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION image.repository=673377339958.dkr.ecr.eu-west-1.amazonaws.com/$repo
