@@ -9,14 +9,17 @@ phases:
 
   pre_build: # Add kubeconfig to access to EKS cluster
     commands:
-      - ls
+      - echo $repo
+      - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
       - aws eks update-kubeconfig --name bharath-codetest-cluster --role-arn arn:aws:iam::673377339958:role/terraform
   build: # Build Docker image and tag it with the commit sha
     commands:
-      - docker build . -t $imagerepo:$CODEBUILD_RESOLVED_SOURCE_VERSION -f app/Dockerfile
-      - docker tag $imagerepo:$CODEBUILD_RESOLVED_SOURCE_VERSION 673377339958.dkr.ecr.eu-west-1.amazonaws.com/$imagerepo:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - cd app
+      - docker build . -t $repo:$CODEBUILD_RESOLVED_SOURCE_VERSION -f app/Dockerfile
+      - docker tag $repo:$CODEBUILD_RESOLVED_SOURCE_VERSION 673377339958.dkr.ecr.eu-west-1.amazonaws.com/$repo:$CODEBUILD_RESOLVED_SOURCE_VERSION
   post_build: # Push the Docker image to the ECR
     commands:
       - $(aws ecr get-login --no-include-email --region eu-west-1)
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$CODEBUILD_RESOLVED_SOURCE_VERSION
-      - "helm upgrade -i brapp  brapp --set image.imageTag =$CODEBUILD_RESOLVED_SOURCE_VERSION"
+      - docker push 673377339958.dkr.ecr.eu-west-1.amazonaws.com/$repo:$CODEBUILD_RESOLVED_SOURCE_VERSION
+      - cd ..
+      - helm upgrade -i brapp  brapp --set image.imageTag = $CODEBUILD_RESOLVED_SOURCE_VERSION
