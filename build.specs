@@ -2,7 +2,8 @@ version: 0.2
 phases:
   install: # Install AWS cli, kubectl (needed for Helm) and Helm
     commands:
-       - apt get update
+       - apt-get update
+       - export DEBIAN_FRONTEND=noninteractive
        - apt install -y awscli git python3 curl
        - curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3;chmod 700 get_helm.sh;./get_helm.sh
   pre_build: # Add kubeconfig to access to EKS cluster
