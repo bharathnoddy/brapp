@@ -32,7 +32,7 @@ def hello():
     count = get_hit_count()
     return 'Hello World! I have been seen {} times.\n'.format(count)
 
-@app.route('/supersecret')
+@app.route('/tellmeasecret')
 @basic_auth.required
 def secret_view():
     count = get_hit_count()
