@@ -19,4 +19,5 @@ phases:
     commands:
       - $(aws ecr get-login --no-include-email --region eu-west-1)
       - docker push 673377339958.dkr.ecr.eu-west-1.amazonaws.com/$repo:$CODEBUILD_RESOLVED_SOURCE_VERSION
-      - [ `helm ls | grep -w brapp | wc -l` -eq 1 ] &&  helm upgrade $appname helm-chart/$appname --set image.imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION,image.repository=$account.dkr.ecr.$region.amazonaws.com/$repo || helm install $appname helm-chart/$appname --set image.imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION,image.repository=$account.dkr.ecr.$region.amazonaws.com/$repo
+      - [ $(helm ls | grep -w brapp | wc -l`) -eq 1 ] &&  helm upgrade $appname helm-chart/$appname --set image.imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION,image.repository=$account.dkr.ecr.$region.amazonaws.com/$repo
+      - [ $(helm ls | grep -w brapp | wc -l`) -eq 0 ] &&  helm install $appname helm-chart/$appname --set image.imageTag=$CODEBUILD_RESOLVED_SOURCE_VERSION,image.repository=$account.dkr.ecr.$region.amazonaws.com/$repo
