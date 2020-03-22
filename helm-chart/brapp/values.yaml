@@ -6,8 +6,8 @@ replicaCount: 1
 name: brapp
 namespace: sandbox
 image:
-  repository: bharathnoddy/br_app
-  imageTag: redis
+  repository: 673377339958.dkr.ecr.eu-west-1.amazonaws.com/brap 
+  imageTag: latest
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []

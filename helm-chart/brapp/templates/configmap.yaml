@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ .Values.name }}
-  namespace: default
+  namespace: {{ .Values.namespace }}
 data:
   REDIS_HOST: {{ .Values.configmap.redishost }}
   REDIS_PORT: "{{ .Values.configmap.redisport }}"
